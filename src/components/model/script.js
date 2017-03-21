@@ -38,6 +38,14 @@ var matLines = new THREE.LineBasicMaterial({
 var material = new THREE.MeshBasicMaterial({
 	color: Colors.primaryColor,
 	transparent:true, 
+	opacity:1,
+	polygonOffset: true,
+	polygonOffsetUnits: 1,
+	polygonOffsetFactor: 1,
+});
+
+var matWhite = new THREE.MeshBasicMaterial({
+	color: Colors.primaryColor,
 	polygonOffset: true,
 	polygonOffsetUnits: 1,
 	polygonOffsetFactor: 1,
@@ -88,7 +96,7 @@ function initScene() {
 
 	//HELPER
 	//scene.add(new THREE.CameraHelper( camera ));
-	scene.add(new THREE.AxisHelper( 85 ) );
+	//scene.add(new THREE.AxisHelper( 85 ) );
 	
 	// Create the renderer
 	renderer = new THREE.WebGLRenderer({
@@ -194,7 +202,7 @@ function focusOnLevel(activateLevel){
 
 function levelFocusAnim(){
 	if(levelOpen && !levelFocusAnim){return false;}
-	
+
 	//level1.mesh.children[0].children[0].material.opacity -= 0.1;
 	//level2.mesh.children[0].children[0].material.opacity -= 0.1;
 
@@ -278,7 +286,7 @@ var Level = function(args){
 		id: "noId",
 		width: 6 * 3 * u,
 		height: 7 * u,
-		depth: 12 * 3 * u,
+		depth: 15 * 3 * u,
         x : 0,
         y : 0,
         z : 0,
@@ -304,7 +312,7 @@ var Roof = function(args){
 		id: "noId",
 		width: 6 * 3 * u,
 		height: 10 * u,
-		depth: 12 * 3 * u,
+		depth: 15 * 3 * u,
         x : 0,
         y : 14 * u,
         z : 0,
@@ -337,7 +345,7 @@ var Front = function(args){
 		id: "noId",
 		width: 6 * 3 * u,
 		height: 10*u,
-		depth: 12 * 3 * u,
+		depth: 15 * 3 * u,
         x : 0,
         y : 14*u,
         z : 0,
@@ -393,20 +401,56 @@ var Front = function(args){
 
 var populateLevel0 = function(){
 
-	level0.mesh.add(new room({
-						id:"fillipus", 
-						width : (3 * 3 * u), 
-						depth: (2 * 3 * u),
-						z : (5 * 3 * u),
-						x : (1.5 * 3 * u) * -1
-					}).mesh);
+	var fillipus = new room({
+					id:"fillipus", 
+					width : (3 * 3 * u), 
+					depth: (3 * 3 * u),
+					z : (6 * 3 * u),
+					x : (1.5 * 3 * u) * -1
+					});
+	level0.mesh.add(fillipus.mesh);
+	
+	//level0.mesh.add(new Desk().mesh);
+
 	level0.mesh.add(new room({
 						id:"Jakobus", 
 						width : (3 * 3 * u), 
-						depth: (2 * 3 * u),
-						z : (5 * 3 * u),
+						depth: (3 * 3 * u),
+						z : (6 * 3 * u),
 						x : (1.5 * 3 * u)
 					}).mesh);
+
+
+	var standup = new room({
+					id:"standup", 
+					depth: (3 * 3 * u),
+					z : (3 * 3 * u),
+					});
+	level0.mesh.add(standup.mesh);
+
+	var work = new room({
+					id:"work", 
+					depth: (3 * 3 * u),
+					z : (0 * 3 * u),
+					y : 10,
+
+					});
+	level0.mesh.add(work.mesh);
+
+	var lunch = new room({
+					id:"lunch", 
+					depth: (3 * 3 * u),
+					z : (-3 * 3 * u),
+					});
+	level0.mesh.add(lunch.mesh);
+
+	var petrus = new room({
+					id:"petrus", 
+					depth: (3 * 3 * u),
+					z : (-6 * 3 * u),
+					});
+	level0.mesh.add(petrus.mesh);
+
 }
 
 
@@ -419,19 +463,98 @@ var room = function(args){
 		x : 0,
 		y : ( 7 * u)/2,
 		z :  0,
+		material : matWhite
 	}, args || {});
 
 	this.mesh = new THREE.Object3D();
 
 	var roomGeom = new THREE.BoxGeometry(args.width, args.height, args.depth);
 	roomGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x,args.y,args.z))
-	var roomMesh = new THREE.Mesh(roomGeom, matDark.clone());
+	var roomMesh = new THREE.Mesh(roomGeom, matInvisible.clone());
 	
-	this.mesh.add(roomMesh)
+	var floorGeom = new THREE.BoxGeometry(args.width, 1, args.depth);
+	floorGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x,0,args.z))
+	
+	var floorMesh = new THREE.Mesh(floorGeom, args.material.clone());
 
+	this.mesh.add(roomMesh)
+	this.mesh.add(floorMesh)
+	
 }
 
+var Desk = function (args) {
+	args = merge({
+		width: 20,
+		depth: 12,
+		height: 7,
+		colorTableTop: Colors.primaryColor,
+		colorLegs: Colors.primaryColor,
+		click: null,
+		over: null,
+		out: null,
+	}, args || {});
+	this.args = args;
+	this.mesh = new THREE.Object3D();
 
+	var geomTable = new THREE.Geometry();
+	var geomTable_top = new THREE.BoxGeometry(args.width, 2, args.depth, 1, 1, 1);
+
+	var geomLegs = new THREE.Geometry();
+	var geomLeg = new THREE.BoxGeometry(2, args.height, 2, 1, 1, 1);
+
+	geomLegs.merge(geomLeg.applyMatrix(new THREE.Matrix4().makeTranslation(-((args.width / 2) - 1), -(args.height / 2) - 1, -(args.depth / 2) + 1)));
+	geomLegs.merge(geomLeg.applyMatrix(new THREE.Matrix4().makeTranslation((args.width - 2), 0, 0)));
+	geomLegs.merge(geomLeg.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, (args.depth - 2))));
+	geomLegs.merge(geomLeg.applyMatrix(new THREE.Matrix4().makeTranslation(-(args.width - 2), 0, 0)));
+
+
+	geomTable.merge(geomTable_top);
+	geomTable.merge(geomLegs);
+
+	var table = new THREE.Mesh(geomTable, matWhite.clone());
+	var geoObject = new THREE.EdgesGeometry(geomTable);
+	var tableLined = new THREE.LineSegments(geoObject, matLines.clone());
+
+
+
+	table.castShadow = true;
+	table.receiveShadow = true;
+
+	table.selected = false;
+	/*
+	table.click = function () {
+		this.selected = !this.selected;
+		if (this.selected) {
+			this.material.color.set(Colors.accentColor);
+		} else {
+			this.material.color.set(Colors.primaryColor);
+		}
+		render();
+		
+	}
+	table.over = function () {
+		var color = (this.selected === true) ? Colors.primaryColor : Colors.accentColor; 
+		
+		var wiredSibling = this.parent.children[1]
+		wiredSibling.material.color.set(color);
+		render();
+	}
+	table.out = function () {
+		var wiredSibling = this.parent.children[1]
+		wiredSibling.material.color.set(Colors.lineColor);
+		render();
+	}
+	*/
+
+	//objectsWireFrameInScene.push(tableLined);
+
+
+	this.mesh.add(table)
+	this.mesh.add(tableLined)
+	this.mesh.position.y += args.height + 1;
+	objectsInScene.push(this.mesh);
+
+}
 
 
 
