@@ -165,7 +165,7 @@ function handleWindowResize() {
 	// call the loop function again
 	requestAnimationFrame(render);
 
-	/*
+	
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
     //controls.target = new THREE.Vector3(0,60,0);
     controls.minPolarAngle = -Math.PI*.45; 
@@ -179,15 +179,16 @@ function handleWindowResize() {
 
     if (controls && controls.enabled) controls.update();
         controls.addEventListener('change', function() { 
-        render()
+        //render()
 	});
-	*/
+	
 }
 
 function focusOnLevel(activateLevel){
 
 	levelOpen = eval(activateLevel);
 	console.log(levelOpen)
+	console.log(level0.mesh.children[0].children[0])
 
 }
 
@@ -256,6 +257,7 @@ var Building = function(args){
 
     
     level0 = new Level(args);
+	populateLevel0();
     this.mesh.add(level0.mesh)
 
 	level1 = new Level({y : 7 * u});
@@ -296,7 +298,6 @@ var Level = function(args){
     
     this.mesh.add(level)
 }
-
 
 var Roof = function(args){
     args = merge({
@@ -390,8 +391,45 @@ var Front = function(args){
 }
 
 
+var populateLevel0 = function(){
+
+	level0.mesh.add(new room({
+						id:"fillipus", 
+						width : (3 * 3 * u), 
+						depth: (2 * 3 * u),
+						z : (5 * 3 * u),
+						x : (1.5 * 3 * u) * -1
+					}).mesh);
+	level0.mesh.add(new room({
+						id:"Jakobus", 
+						width : (3 * 3 * u), 
+						depth: (2 * 3 * u),
+						z : (5 * 3 * u),
+						x : (1.5 * 3 * u)
+					}).mesh);
+}
 
 
+var room = function(args){
+	args = merge({
+		id: "noId",
+		width: 6 * 3 * u,
+		height: 7 * u,
+		depth: 12 * 3 * u,
+		x : 0,
+		y : ( 7 * u)/2,
+		z :  0,
+	}, args || {});
+
+	this.mesh = new THREE.Object3D();
+
+	var roomGeom = new THREE.BoxGeometry(args.width, args.height, args.depth);
+	roomGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x,args.y,args.z))
+	var roomMesh = new THREE.Mesh(roomGeom, matDark.clone());
+	
+	this.mesh.add(roomMesh)
+
+}
 
 
 
