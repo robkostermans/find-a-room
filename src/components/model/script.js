@@ -4,7 +4,7 @@
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH, renderer, container, shadowLight;
 var church, level0,level1,level2, front;
-var levelOpen,levelFocusAnim;
+var levelOpen,levelFocusAnim, levelFocusAnimState;
 
 var objectsInScene = [];
 var objectsWireFrameInScene = [];
@@ -19,7 +19,7 @@ var Settings = {
 
 var Colors = {
 	primaryColor: 0xffffff,
-	secondaryColor: 0xdddddd,
+	secondaryColor: 0xeeeeee,
 	backgroundColor: 0xa9a9a9,
 	strokeColor: 0x333333,
 	lineColor: 0x333333,
@@ -42,6 +42,7 @@ var material = new THREE.MeshBasicMaterial({
 	polygonOffset: true,
 	polygonOffsetUnits: 1,
 	polygonOffsetFactor: 1,
+	
 });
 
 var matWhite = new THREE.MeshBasicMaterial({
@@ -50,6 +51,14 @@ var matWhite = new THREE.MeshBasicMaterial({
 	polygonOffsetUnits: 1,
 	polygonOffsetFactor: 1,
 });
+
+var matZone = new THREE.MeshBasicMaterial({
+	color: Colors.secondaryColor,
+	polygonOffset: true,
+	polygonOffsetUnits: -1,
+	polygonOffsetFactor: 1,
+});
+
 
 var matDark = new THREE.MeshBasicMaterial({
 	color: Colors.lineColor,
@@ -63,6 +72,17 @@ var matLinesInvisible = new THREE.LineBasicMaterial({
 	linewidth: Settings.strokeWidth,
 	transparent:true, 
 	opacity:1,
+});
+
+
+var matLinesAvailable = new THREE.LineBasicMaterial({
+	color: Colors.accentColor,
+	linewidth: Settings.strokeWidth,
+});
+
+var matLinesUnAvailable = new THREE.LineBasicMaterial({
+	color: Colors.lineColor,
+	linewidth: Settings.strokeWidth,
 });
 
 
@@ -145,6 +165,22 @@ function initScene() {
 	//var helper = new THREE.HemisphereLightHelper( hemisphereLight, 5 );
 	//scene.add( helper );
 
+	var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    //controls.target = new THREE.Vector3(0,60,0);
+    controls.minPolarAngle = -Math.PI*.45; 
+    controls.maxPolarAngle = Math.PI*.45;
+    controls.minDistance = 500;
+    controls.maxDistance = 2000;
+    controls.enabled = true;
+    controls.enableZoom  = true;
+    controls.enablePan  = false;
+    
+
+    if (controls && controls.enabled) controls.update();
+        controls.addEventListener('change', function() { 
+        //render()
+	});
+
 }
 
 function handleWindowResize() {
@@ -174,54 +210,67 @@ function handleWindowResize() {
 	requestAnimationFrame(render);
 
 	
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    //controls.target = new THREE.Vector3(0,60,0);
-    controls.minPolarAngle = -Math.PI*.45; 
-    controls.maxPolarAngle = Math.PI*.45;
-    //controls.minDistance = 500;
-    //controls.maxDistance = 1000;
-    controls.enabled = true;
-    controls.enableZoom  = false;
-    controls.enablePan  = false;
     
-
-    if (controls && controls.enabled) controls.update();
-        controls.addEventListener('change', function() { 
-        //render()
-	});
 	
 }
 
 function focusOnLevel(activateLevel){
 
 	levelOpen = eval(activateLevel);
-	console.log(levelOpen)
-	console.log(level0.mesh.children[0].children[0])
 
 }
 
-function levelFocusAnim(){
-	if(levelOpen && !levelFocusAnim){return false;}
+function buildingExplode(){
+	if(levelOpen && levelFocusAnimState){return false;}
 
-	//level1.mesh.children[0].children[0].material.opacity -= 0.1;
-	//level2.mesh.children[0].children[0].material.opacity -= 0.1;
+	TweenLite.to(level2.mesh.position, 1, {y : 25})
+	TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenLite.to(level2.mesh.children[0].children[1].material, 2, {opacity: 0.25});
 
-	TweenLite.to(level2.mesh.position, 2, {y : 200})
-	//TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity : 0})
+	TweenLite.to(level1.mesh.position, 1, {y : -25, delay : 0})
+	TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenLite.to(level1.mesh.children[0].children[1].material, 2, {opacity: 0.25});
 
-	TweenLite.to(level1.mesh.position, 2, {y : 200, delay : 0.3})
-	//TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity : 0, delay : 0.3})
+	TweenLite.to(level0.mesh.position, 1, {y : -75, delay : 0})
+
+	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenLite.to(level0.mesh.children[0].children[1].material, 2, {opacity: 0.25});
+
+	TweenLite.to(front.mesh.position, 1, {z : 100, y : -50, delay : 0})
 	
 
-	TweenLite.to(front.mesh.position, 2, {z : 100, delay : 0.1})
-	
+	levelFocusAnimState = true;
 
-	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0})
-	//levelOpen.mesh.position.y += 1;
-		
 }
 
+function buildingOpenAnim(){
+	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity: 0});
+}
 
+function buildingReset(){
+	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 1});
+	TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity: 1});
+	TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity: 1});
+
+	TweenLite.to(level0.mesh.children[0].children[1].material, 2, {opacity: 1});
+	TweenLite.to(level1.mesh.children[0].children[1].material, 2, {opacity: 1});
+	TweenLite.to(level2.mesh.children[0].children[1].material, 2, {opacity: 1});
+
+	TweenLite.to(level2.mesh.position, 1, {y : 0, delay : 0})
+	TweenLite.to(level1.mesh.position, 1, {y : 0, delay : 0})
+	TweenLite.to(level0.mesh.position, 1, {y : 0, delay : 0})
+	TweenLite.to(front.mesh.position, 1, {z : 0, y :0, delay : 0})
+
+	levelFocusAnimState = false;
+	levelOpen = false;
+}
+
+function rob(){
+	console.log("end transition")
+	
+}
 
 /**
  * HELPERS
@@ -269,6 +318,8 @@ var Building = function(args){
     this.mesh.add(level0.mesh)
 
 	level1 = new Level({y : 7 * u});
+	populateLevel1();
+	
     this.mesh.add(level1.mesh)
 
 
@@ -299,7 +350,7 @@ var Level = function(args){
    	LevelGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x, args.y + args.height/2, args.z))
 
 	var levelMesh = new THREE.Mesh(LevelGeom, material.clone());
-	var levelFrame = new THREE.LineSegments(new THREE.EdgesGeometry(LevelGeom), matLinesInvisible.clone());
+	var levelFrame = new THREE.LineSegments(new THREE.EdgesGeometry(LevelGeom),  matLinesInvisible.clone());
 
     level.add(levelMesh)
     level.add(levelFrame)
@@ -402,96 +453,285 @@ var Front = function(args){
 var populateLevel0 = function(){
 
 	var fillipus = new room({
-					id:"fillipus", 
-					width : (3 * 3 * u), 
-					depth: (3 * 3 * u),
-					z : (6 * 3 * u),
-					x : (1.5 * 3 * u) * -1
-					});
+			id:"fillipus",
+			type:"room",
+			width : (3 * 3 * u), 
+			depth: (3 * 3 * u),
+			z : (6 * 3 * u),
+			x : (1.5 * 3 * u) * -1,
+	});
+	var du = 15/2; // deskunit
+	fillipus.mesh.add(new Desk({z : fillipus.args.z -5,x : - fillipus.args.width + 1 + du,}).mesh);
+	fillipus.mesh.add(new Desk({z : fillipus.args.z +5,x : - fillipus.args.width + 1 + du,}).mesh);
+	fillipus.mesh.add(new Desk({z : fillipus.args.z -5,x : - fillipus.args.width + 1 + du*3,}).mesh);
+	fillipus.mesh.add(new Desk({z : fillipus.args.z +5,x : - fillipus.args.width + 1 + du*3,}).mesh);
+	fillipus.mesh.add(new Desk({z : fillipus.args.z -5,x : - fillipus.args.width + 1 + du*5,}).mesh);
+	fillipus.mesh.add(new Desk({z : fillipus.args.z +5,x : - fillipus.args.width + 1 + du*5,}).mesh);
+	fillipus.mesh.add(new Desk({z : fillipus.args.z -5,x : - fillipus.args.width + 1 + du*7,}).mesh);
+	fillipus.mesh.add(new Desk({z : fillipus.args.z +5,x : - fillipus.args.width + 1 + du*7,}).mesh);
 	level0.mesh.add(fillipus.mesh);
-	
-	//level0.mesh.add(new Desk().mesh);
 
-	level0.mesh.add(new room({
-						id:"Jakobus", 
-						width : (3 * 3 * u), 
-						depth: (3 * 3 * u),
-						z : (6 * 3 * u),
-						x : (1.5 * 3 * u)
-					}).mesh);
+	// jakobus
+	var jakobus = new room({
+			id:"Jakobus", 
+			type:"room",
+			width : (3 * 3 * u), 
+			depth: (3 * 3 * u),
+			z : (6 * 3 * u),
+			x : (1.5 * 3 * u),
+		});
+	var du = 15/2; // deskunit
+	jakobus.mesh.add(new Desk({z : jakobus.args.z -5,x :  jakobus.args.width - 1 - du,}).mesh);
+	jakobus.mesh.add(new Desk({z : jakobus.args.z +5,x :  jakobus.args.width - 1 - du,}).mesh);
+	jakobus.mesh.add(new Desk({z : jakobus.args.z -5,x :  jakobus.args.width - 1 - du*3,}).mesh);
+	jakobus.mesh.add(new Desk({z : jakobus.args.z +5,x :  jakobus.args.width - 1 - du*3,}).mesh);
+	jakobus.mesh.add(new Desk({z : jakobus.args.z -5,x :  jakobus.args.width - 1 - du*5,}).mesh);
+	jakobus.mesh.add(new Desk({z : jakobus.args.z +5,x :  jakobus.args.width - 1 - du*5,}).mesh);
+	jakobus.mesh.add(new Desk({z : jakobus.args.z -5,x :  jakobus.args.width - 1 - du*7,}).mesh);
+	jakobus.mesh.add(new Desk({z : jakobus.args.z +5,x :  jakobus.args.width - 1 - du*7,}).mesh);
+	level0.mesh.add(jakobus.mesh);
 
-
+	// STANDUP workplaces
 	var standup = new room({
-					id:"standup", 
-					depth: (3 * 3 * u),
-					z : (3 * 3 * u),
-					});
+			id:"standup", 
+			depth: (3 * 3 * u),
+			z : (3 * 3 * u),
+		});
+	var du = 15/2; // deskunit
+		
+	standup.mesh.add(new Desk({z : standup.args.z -5,x : - standup.args.width/2 + du*3,}).mesh);
+	standup.mesh.add(new Desk({z : standup.args.z +5,x : - standup.args.width/2 + du*3,}).mesh);
+	standup.mesh.add(new Desk({z : standup.args.z -5,x : - standup.args.width/2 + du*5,}).mesh);
+	standup.mesh.add(new Desk({z : standup.args.z +5,x : - standup.args.width/2 + du*5,}).mesh);
+
+	var du = 10/2; // deskunit
+	standup.mesh.add(new Desk({width : 10, depth : 15, z : standup.args.z -(15/2),x : standup.args.width/2 - du*6,}).mesh)
+	standup.mesh.add(new Desk({width : 10, depth : 15, z : standup.args.z +(15/2),x : standup.args.width/2 - du*6,}).mesh)
+	standup.mesh.add(new Desk({width : 10, depth : 15, z : standup.args.z -(15/2),x : standup.args.width/2 - du*8,}).mesh)
+	standup.mesh.add(new Desk({width : 10, depth : 15, z : standup.args.z +(15/2),x : standup.args.width/2 - du*8,}).mesh)
 	level0.mesh.add(standup.mesh);
 
+	// WORK
 	var work = new room({
-					id:"work", 
-					depth: (3 * 3 * u),
-					z : (0 * 3 * u),
-					y : 10,
-
-					});
+			id:"work", 
+			depth: (3 * 3 * u),
+			z : (0 * 3 * u),
+		});
+	var du = 15/2; // deskunit
+	work.mesh.add(new Desk({z : work.args.z -5,x : - work.args.width/2 + 1 + du,}).mesh);
+	work.mesh.add(new Desk({z : work.args.z +5,x : - work.args.width/2 + 1 + du,}).mesh);
+	work.mesh.add(new Desk({z : work.args.z -5,x : - work.args.width/2 + 1 + du*3,}).mesh);
+	work.mesh.add(new Desk({z : work.args.z +5,x : - work.args.width/2 + 1 + du*3,}).mesh);
+	work.mesh.add(new Desk({z : work.args.z -5,x : - work.args.width/2 + 1 + du*5,}).mesh);
+	work.mesh.add(new Desk({z : work.args.z +5,x : - work.args.width/2 + 1 + du*5,}).mesh);
+	work.mesh.add(new Desk({z : work.args.z -5,x : - work.args.width/2 + 1 + du*7,}).mesh);
+	work.mesh.add(new Desk({z : work.args.z +5,x : - work.args.width/2 + 1 + du*7,}).mesh);
 	level0.mesh.add(work.mesh);
 
+	// LUNCH / ALTAR
 	var lunch = new room({
-					id:"lunch", 
-					depth: (3 * 3 * u),
-					z : (-3 * 3 * u),
-					});
+			id:"lunch", 
+			depth: (3 * 3 * u),
+			z : (-3 * 3 * u),
+		});
+	var altar = new Desk({
+			width :  3 * 3 * u,
+			depth: 10,
+			z : lunch.args.z - lunch.args.depth /2 + 10,
+	});
+	lunch.mesh.add(altar.mesh)			
+	
+	var lunchtable = new Desk({
+			width :  15,
+			depth: 30,
+			z : lunch.args.z + lunch.args.depth /2 - 20,
+			x : - lunch.args.width/3,
+	});
+	lunch.mesh.add(lunchtable.mesh)		
+
+	var tree = new Tree({z : lunch.args.z + 25});
+	lunch.mesh.add(tree.mesh)		
+
 	level0.mesh.add(lunch.mesh);
 
+	// TOP
 	var petrus = new room({
-					id:"petrus", 
+			id:"petrus", 
+			type:"room",
+			width : (3 * 3 * u), 
+			depth: (3 * 3 * u),
+			z : (-6 * 3 * u),
+		});
+	var desk = new Desk({width : 20,depth: 20,z : petrus.args.z,});
+	petrus.mesh.add(desk.mesh)			
+	level0.mesh.add(petrus.mesh);
+
+
+	var kitchen = new room({
+					id:"kitchen", 
+					width : (1.5 * 3 * u), 
 					depth: (3 * 3 * u),
 					z : (-6 * 3 * u),
+					x : ((-1.5 -0.75)  * 3 * u),
 					});
-	level0.mesh.add(petrus.mesh);
+	level0.mesh.add(kitchen.mesh);
+
+	var entrance = new room({
+					id:"entrance", 
+					width : (1.5 * 3 * u), 
+					depth: (3 * 3 * u),
+					z : (-6 * 3 * u),
+					x : ((1.5 + 0.75)  * 3 * u),
+
+					});
+	level0.mesh.add(entrance.mesh);
 
 }
 
+var populateLevel1 = function(){
+	var paulus = new room({
+			id:"paulus",
+			type:"room",
+			width : (4 * 3 * u), 
+			depth: (3 * 3 * u),
+			z : (6 * 3 * u),
+			x : (1 * 3 * u) * -1,
+			y : (7 * u),
+	});
+	var du = 15/2; // deskunit
+	paulus.mesh.add(new Desk({width: paulus.args.width/1.5, depth : paulus.args.depth/2, z : paulus.args.z ,y: paulus.args.y ,x : -25}).mesh);
 
+	level1.mesh.add(paulus.mesh);
+
+	//hallway
+	var hallway = new room({
+			id:"hallway",
+			width : (2 * 3 * u), 
+			depth: (4 * 3 * u),
+			z : (5.5 * 3 * u),
+			x : (2 * 3 * u),
+			y : (7 * u),
+	});
+	level1.mesh.add(hallway.mesh);
+
+	var fishbowl = new room({
+			id:"FishBowl",
+			width : (3 * 3 * u), 
+			depth: (5 * 3 * u),
+			z : (2 * 3 * u),
+			x : (0.5 * 3 * u) * -1,
+			y : (7 * u),
+	});
+	var du = 15/2; // deskunit
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z - 30, y: fishbowl.args.y ,x : fishbowl.args.x - 15,}).mesh);
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z - 30 - 10, y: fishbowl.args.y ,x : fishbowl.args.x - 15,}).mesh);
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z - 30, y: fishbowl.args.y ,x : fishbowl.args.x + 15,}).mesh);
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z - 30 - 10, y: fishbowl.args.y ,x : fishbowl.args.x + 15,}).mesh);
+
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z + 30, y: fishbowl.args.y ,x : fishbowl.args.x - 15,}).mesh);
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z + 30 - 10, y: fishbowl.args.y ,x : fishbowl.args.x - 15,}).mesh);
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z + 30, y: fishbowl.args.y ,x : fishbowl.args.x + 15,}).mesh);
+	fishbowl.mesh.add(new Desk({z : fishbowl.args.z + 30 - 10, y: fishbowl.args.y ,x : fishbowl.args.x + 15,}).mesh);
+
+	level1.mesh.add(fishbowl.mesh);
+
+	var andreas = new room({
+			id:"andreas", 
+			type:"room",
+			width : (3 * 3 * u), 
+			depth: (2 * 3 * u),
+			z : (-5.5 * 3 * u),
+			y : (7 * u),
+			
+		});
+
+	level1.mesh.add(andreas.mesh);
+
+
+	var mattheus = new room({
+			id:"mattheus", 
+			type:"room",
+			width : (1.5 * 3 * u), 
+			depth: (3 * 3 * u),
+			z : (-6 * 3 * u),
+			x : ((-1.5 -0.75)  * 3 * u),
+			y : (7 * u),
+	});
+	var desk = new Desk({width : 20,depth: 20,y: mattheus.args.y,z : mattheus.args.z, x : mattheus.args.x});
+	mattheus.mesh.add(desk.mesh)		
+	level1.mesh.add(mattheus.mesh);
+
+	var jakobus = new room({
+			id:"jakobus", 
+			type:"room",
+			width : (1.5 * 3 * u), 
+			depth: (2 * 3 * u),
+			z : (-5.5 * 3 * u),
+			x : ((1.5 + 0.75)  * 3 * u),
+			y : (7 * u),
+	});
+	var desk = new Desk({width : 20,depth: 20,y: jakobus.args.y,z : jakobus.args.z, x : jakobus.args.x});
+	jakobus.mesh.add(desk.mesh)
+	level1.mesh.add(jakobus.mesh);
+
+	var smallhallway = new room({
+			id:"smallhallway", 
+			width : (4.5 * 3 * u), 
+			depth: (1 * 3 * u),
+			z : (-7 * 3 * u),
+			x : ((0 + 0.75)  * 3 * u),
+			y : (7 * u),
+	});
+	level1.mesh.add(smallhallway.mesh);
+
+}
 var room = function(args){
 	args = merge({
 		id: "noId",
+		type:"none",
 		width: 6 * 3 * u,
 		height: 7 * u,
 		depth: 12 * 3 * u,
 		x : 0,
-		y : ( 7 * u)/2,
+		y : 0,
 		z :  0,
 		material : matWhite
 	}, args || {});
-
+	this.args = args;
 	this.mesh = new THREE.Object3D();
 
 	var roomGeom = new THREE.BoxGeometry(args.width, args.height, args.depth);
 	roomGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x,args.y,args.z))
 	var roomMesh = new THREE.Mesh(roomGeom, matInvisible.clone());
 	
-	var floorGeom = new THREE.BoxGeometry(args.width, 1, args.depth);
-	floorGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x,0,args.z))
-	
-	var floorMesh = new THREE.Mesh(floorGeom, args.material.clone());
+	var floorGeom = new THREE.BoxGeometry(args.width, 0, args.depth);
+	floorGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x,args.y,args.z))
 
+	var floorMaterial = (args.type == "room") ? matZone : args.material;
+	var floorMesh = new THREE.Mesh(floorGeom, floorMaterial.clone());
+
+	
 	this.mesh.add(roomMesh)
 	this.mesh.add(floorMesh)
+	
+	if(args.type == "room")
+		this.mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(floorGeom), matLinesAvailable.clone()));
 	
 }
 
 var Desk = function (args) {
 	args = merge({
-		width: 20,
-		depth: 12,
+		width: 15,
+		depth: 10,
 		height: 7,
 		colorTableTop: Colors.primaryColor,
 		colorLegs: Colors.primaryColor,
 		click: null,
 		over: null,
 		out: null,
+		x : 0,
+		y : 0,
+		z : 0,
 	}, args || {});
 	this.args = args;
 	this.mesh = new THREE.Object3D();
@@ -510,7 +750,9 @@ var Desk = function (args) {
 
 	geomTable.merge(geomTable_top);
 	geomTable.merge(geomLegs);
-
+	
+	geomTable.applyMatrix(new THREE.Matrix4().makeTranslation(args.x,args.y,args.z))
+	
 	var table = new THREE.Mesh(geomTable, matWhite.clone());
 	var geoObject = new THREE.EdgesGeometry(geomTable);
 	var tableLined = new THREE.LineSegments(geoObject, matLines.clone());
@@ -556,6 +798,81 @@ var Desk = function (args) {
 
 }
 
+var Tree = function (args) {
+	args = merge({
+		id : null,
+		size: 15,
+		height:45,
+		x: 0,
+		y: 0,
+		z: 0,
+		
+	}, args || {});
+	
+	this.mesh = new THREE.Object3D();
+	this.mesh.castShadow = true;
+	this.mesh.receiveShadow = true;
+
+	var treeGeom = new THREE.Geometry();
+
+	// POT
+	var geomPot = new THREE.CylinderGeometry((args.size), args.size / 3, args.size, 0, 1, false);
+	treeGeom.merge(geomPot.applyMatrix(new THREE.Matrix4().makeTranslation(0, args.size / 2, 0)));
+	// trunk
+	var geomTrunk = new THREE.CylinderGeometry(2, 2, args.height, 0, 1, false);
+	treeGeom.merge(geomTrunk.applyMatrix(new THREE.Matrix4().makeTranslation(0, args.height / 2, 0)));
+
+	// bush
+	var geomBush = new THREE.SphereGeometry((args.size * 1.5), 7, 7);
+	treeGeom.merge(geomBush.applyMatrix(new THREE.Matrix4().makeTranslation(0, args.height + (args.size / 2), 0)));
+
+
+	treeGeom.applyMatrix(new THREE.Matrix4().makeTranslation(args.x, args.y, args.z));
+	
+
+
+	var tree = new THREE.Mesh(treeGeom, matWhite.clone());
+	var geoObject = new THREE.EdgesGeometry(treeGeom);
+	var treeLined = new THREE.LineSegments(geoObject, matLines);
+
+	tree.selected = false;
+	tree.args = args;
+	
+	tree.click = function () {
+		this.selected = !tree.selected 
+		if (this.selected) {
+			this.material.color.set(Colors.accentColor);
+		} else {
+			this.material.color.set(Colors.primaryColor);
+
+		}
+		render();
+		
+		showDetails(this.args.id,this.selected);
+		
+	}
+
+	tree.over = function () {
+		var color = (this.selected === true) ? Colors.primaryColor : Colors.accentColor; 
+		var wiredSibling = this.parent.children[1]
+		wiredSibling.material.color.set(color);
+		render();
+	}
+	tree.out = function () {
+		var wiredSibling = this.parent.children[1]
+		wiredSibling.material.color.set(Colors.lineColor);
+		render();
+	}
+
+	this.mesh.add(tree);
+	this.mesh.add(treeLined);
+
+	objectsInScene.push(this.mesh);
+	
+
+
+
+}
 
 
 

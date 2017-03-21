@@ -3,10 +3,11 @@
   <head>
     <title>Church</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body class="_body">
     <main>
-      <nav><a href="#groundfloor" onclick="focusOnLevel('level0')">ground floor</a></nav>
+      <nav><a href="#groundfloor" onclick="buildingExplode('level0')"><i class="material-icons">layers</i></a><a href="#groundfloor" onclick="buildingReset()"><i class="material-icons">layers_clear</i></a><a href="#groundfloor" onclick="buildingReset()"><i class="material-icons">format_color_reset</i></a><a href="#groundfloor" onclick="buildingOpenAnim()"><i class="material-icons">opacity</i></a></nav>
       <div id="canvas"></div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
