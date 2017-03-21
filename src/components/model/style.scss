@@ -1,0 +1,51 @@
+$primary-color: #023c8e;
+$secondary-color: #ddd;
+$background-color: #208fe5;
+$colorBackgroundDark: #A9A9A9;
+$colorBackgroundLight: #f2f2f2;
+$colorAccent: #023c8e;
+$colorTextDark: #333;
+$primary-color: #A9A9A9;
+$secondary-color: #ddd;
+$background-color: #ddd;
+
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    margin: 0;
+    color: $colorTextDark;
+    line-height: 1.4;
+}
+
+nav{
+    position:fixed;
+    z-index:999;
+    
+}
+
+main {
+    //background-image: radial-gradient(center, #208fe5 0%, #023c8e 50%);
+    //background: radial-gradient(ellipse at center,$colorBackgroundLight 0%,$colorBackgroundDark 100%);
+    background-color: $colorBackgroundLight;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 800;
+
+    #canvas {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+    }
+
+}

@@ -1,0 +1,25 @@
+doctype html
+html(lang="en/us")  
+    head
+        title Church
+        link(href='style.css', rel='stylesheet',type="text/css")
+    body(class="_body")
+        main
+            nav
+                a(href="#groundfloor") ground floor
+            div(id='canvas')
+        
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js')
+        script(src='script.js')
+        script.
+            window.addEventListener('load', init, false);
+            function init() {
+                initScene();
+                var church = new Building();
+                scene.add(church.mesh)
+
+                render();
+            }
+        
+            
+            

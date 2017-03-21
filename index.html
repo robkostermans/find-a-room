@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en/us"> 
+  <head>
+    <title>Church</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body class="_body">
+    <main>
+      <nav><a href="#groundfloor">ground floor</a></nav>
+      <div id="canvas"></div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+      window.addEventListener('load', init, false);
+      function init() {
+          initScene();
+          var church = new Building();
+          scene.add(church.mesh)
+      
+          render();
+      }
+    </script>
+  </body>
+</html>
