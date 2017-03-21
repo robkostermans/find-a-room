@@ -6,16 +6,16 @@ html(lang="en/us")
     body(class="_body")
         main
             nav
-                a(href="#groundfloor") ground floor
+                a(href="#groundfloor", onclick="focusOnLevel('level0')") ground floor
             div(id='canvas')
-        
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js")
         script(src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js')
         script(src='script.js')
         script.
             window.addEventListener('load', init, false);
             function init() {
                 initScene();
-                var church = new Building();
+                church = new Building();
                 scene.add(church.mesh)
 
                 render();

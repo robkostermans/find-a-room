@@ -3,6 +3,9 @@
  */
 
 var scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH, renderer, container, shadowLight;
+var church, level0,level1,level2, front;
+var levelOpen,levelFocusAnim;
+
 var objectsInScene = [];
 var objectsWireFrameInScene = [];
 var u = 8; // basic unit
@@ -34,6 +37,7 @@ var matLines = new THREE.LineBasicMaterial({
 
 var material = new THREE.MeshBasicMaterial({
 	color: Colors.primaryColor,
+	transparent:true, 
 	polygonOffset: true,
 	polygonOffsetUnits: 1,
 	polygonOffsetFactor: 1,
@@ -145,11 +149,23 @@ function handleWindowResize() {
 	render();
 }
 
-function render() {
-	shadowLight.position.copy(camera.position);
+
+ function render() {
+	//shadowLight.position.copy(camera.position);
+
+	//church.mesh.position.y  +=1;
+	//console.log(levelOpen)
+	if(levelOpen){
+		levelFocusAnim(levelOpen);
+	}
+
+	// render the scene
 	renderer.render(scene, camera);
 
+	// call the loop function again
+	requestAnimationFrame(render);
 
+	/*
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
     //controls.target = new THREE.Vector3(0,60,0);
     controls.minPolarAngle = -Math.PI*.45; 
@@ -164,8 +180,44 @@ function render() {
     if (controls && controls.enabled) controls.update();
         controls.addEventListener('change', function() { 
         render()
-        });
+	});
+	*/
 }
+
+function focusOnLevel(activateLevel){
+
+	levelOpen = eval(activateLevel);
+	console.log(levelOpen)
+
+}
+
+function levelFocusAnim(){
+	if(levelOpen && !levelFocusAnim){return false;}
+	
+	//level1.mesh.children[0].children[0].material.opacity -= 0.1;
+	//level2.mesh.children[0].children[0].material.opacity -= 0.1;
+
+	TweenLite.to(level2.mesh.position, 2, {y : 200})
+	//TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity : 0})
+
+	TweenLite.to(level1.mesh.position, 2, {y : 200, delay : 0.3})
+	//TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity : 0, delay : 0.3})
+	
+
+	TweenLite.to(front.mesh.position, 2, {z : 100, delay : 0.1})
+	
+
+	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0})
+	//levelOpen.mesh.position.y += 1;
+		
+}
+
+
+
+/**
+ * HELPERS
+ */
+
 
 function merge() {
     var obj, name, copy,
@@ -202,16 +254,18 @@ var Building = function(args){
 
 	this.mesh = new THREE.Object3D();
 
-    var level0 = new Level({y : 7 * u});
+    
+    level0 = new Level(args);
     this.mesh.add(level0.mesh)
 
-    var level1 = new Level(args);
+	level1 = new Level({y : 7 * u});
     this.mesh.add(level1.mesh)
 
-    var level2 = new Roof();
+
+    level2 = new Roof();
     this.mesh.add(level2.mesh)
 
-	var front = new Front();
+	front = new Front();
     this.mesh.add(front.mesh)
 
 
