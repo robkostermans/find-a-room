@@ -111,10 +111,14 @@ nav {
     border-radius: 50%; //background-color:red; 
     box-shadow: 0 0 $bar rgba(0, 0, 0, .2);
     a {
+      opacity:0;
       color:$colorAccent;
       display: block;
       text-align: center;
       line-height:1;
+    }
+    &[data-active="reset"] a#reset{
+      opacity:1;
     }
   }
 }

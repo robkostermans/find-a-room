@@ -15,10 +15,8 @@
 <div class="loader" id="end"></div>
 </div>
 </div>
-      <div class="circle-content"><a href="#groundfloor" onclick="buildingExplode('level0')"><i class="material-icons">layers</i></a>
-        <!--a(href="#groundfloor", onclick="buildingReset()") <i class="material-icons">layers_clear</i>-->
-        <!--a(href="#groundfloor", onclick="buildingReset()") <i class="material-icons">format_color_reset</i>-->
-        <!--a(href="#groundfloor", onclick="buildingOpenAnim()") <i class="material-icons">opacity</i>-->
+      <div class="circle-content" data-active="reset"><a href="#explode" onclick="buildingExplode()"><i class="material-icons">layers</i></a><a id="reset" href="#reset" onclick="buildingReset()"><i class="material-icons">layers_clear</i></a>
+        <!--a(class="active" href="#reset", onclick="buildingReset()") <i class="material-icons">format_color_reset</i>--><a href="#opaque" onclick="buildingOpenAnim()"><i class="material-icons">opacity</i></a>
       </div></nav>
       <div id="canvas"></div>
     </main>
@@ -29,7 +27,7 @@
       window.addEventListener('load', init, false);
       function init() {
           initScene();
-          initNavigation(2);
+          initNavigation(2,buildingExplode);
           church = new Building();
           scene.add(church.mesh)
       

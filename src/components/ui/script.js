@@ -1,8 +1,5 @@
-var initApp = function(){
-    console.log("go")
-}
+
 var initNavigation = function(duration,callback){
-    callback = callback || initApp;
     var animation = new TimelineMax()
     animation.to(
         ".left-wrap .loader", 
@@ -11,10 +8,15 @@ var initNavigation = function(duration,callback){
     }).to(
         ".right-wrap .loader", 
         duration/2,
-        {css:{rotation: 180},ease:Linear.easeNone,onComplete:eval(callback)
+        {css:{rotation: 180},ease:Linear.easeNone,onComplete:function(){ActivateNavigation(callback)}
     })
 }
 
+
+var ActivateNavigation = function(callback){
+    console.log(callback)
+    callback.call(this);;
+}
 
 
 

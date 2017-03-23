@@ -17,7 +17,7 @@ html(lang="en/us")
             window.addEventListener('load', init, false);
             function init() {
                 initScene();
-                initNavigation(2);
+                initNavigation(2,buildingExplode);
                 church = new Building();
                 scene.add(church.mesh)
 
