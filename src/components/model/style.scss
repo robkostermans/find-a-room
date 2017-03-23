@@ -5,9 +5,9 @@ $colorBackgroundDark: #A9A9A9;
 $colorBackgroundLight: #f2f2f2;
 $colorAccent: #023c8e;
 $colorTextDark: #333;
-$primary-color: #A9A9A9;
-$secondary-color: #ddd;
-$background-color: #ddd;
+//$primary-color: #A9A9A9;
+//$secondary-color: #ddd;
+//$background-color: #ddd;
 
 
 html,
@@ -22,12 +22,6 @@ body {
     margin: 0;
     color: $colorTextDark;
     line-height: 1.4;
-}
-
-nav{
-    position:fixed;
-    z-index:999;
-    
 }
 
 main {

@@ -223,20 +223,20 @@ function focusOnLevel(activateLevel){
 function buildingExplode(){
 	if(levelOpen && levelFocusAnimState){return false;}
 
-	TweenLite.to(level2.mesh.position, 1, {y : 25})
-	TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity: 0});
-	TweenLite.to(level2.mesh.children[0].children[1].material, 2, {opacity: 0.25});
+	TweenMax.to(level2.mesh.position, 1, {y : 25})
+	TweenMax.to(level2.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenMax.to(level2.mesh.children[0].children[1].material, 2, {opacity: 0.25});
 
-	TweenLite.to(level1.mesh.position, 1, {y : -25, delay : 0})
-	TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity: 0});
-	TweenLite.to(level1.mesh.children[0].children[1].material, 2, {opacity: 0.25});
+	TweenMax.to(level1.mesh.position, 1, {y : -25, delay : 0})
+	TweenMax.to(level1.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenMax.to(level1.mesh.children[0].children[1].material, 2, {opacity: 0.25});
 
-	TweenLite.to(level0.mesh.position, 1, {y : -75, delay : 0})
+	TweenMax.to(level0.mesh.position, 1, {y : -75, delay : 0})
 
-	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0});
-	TweenLite.to(level0.mesh.children[0].children[1].material, 2, {opacity: 0.25});
+	TweenMax.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenMax.to(level0.mesh.children[0].children[1].material, 2, {opacity: 0.25});
 
-	TweenLite.to(front.mesh.position, 1, {z : 100, y : -50, delay : 0})
+	TweenMax.to(front.mesh.position, 1, {z : 100, y : -50, delay : 0})
 	
 
 	levelFocusAnimState = true;
@@ -244,24 +244,24 @@ function buildingExplode(){
 }
 
 function buildingOpenAnim(){
-	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0});
-	TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity: 0});
-	TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenMax.to(level0.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenMax.to(level1.mesh.children[0].children[0].material, 2, {opacity: 0});
+	TweenMax.to(level2.mesh.children[0].children[0].material, 2, {opacity: 0});
 }
 
 function buildingReset(){
-	TweenLite.to(level0.mesh.children[0].children[0].material, 2, {opacity: 1});
-	TweenLite.to(level1.mesh.children[0].children[0].material, 2, {opacity: 1});
-	TweenLite.to(level2.mesh.children[0].children[0].material, 2, {opacity: 1});
+	TweenMax.to(level0.mesh.children[0].children[0].material, 2, {opacity: 1});
+	TweenMax.to(level1.mesh.children[0].children[0].material, 2, {opacity: 1});
+	TweenMax.to(level2.mesh.children[0].children[0].material, 2, {opacity: 1});
 
-	TweenLite.to(level0.mesh.children[0].children[1].material, 2, {opacity: 1});
-	TweenLite.to(level1.mesh.children[0].children[1].material, 2, {opacity: 1});
-	TweenLite.to(level2.mesh.children[0].children[1].material, 2, {opacity: 1});
+	TweenMax.to(level0.mesh.children[0].children[1].material, 2, {opacity: 1});
+	TweenMax.to(level1.mesh.children[0].children[1].material, 2, {opacity: 1});
+	TweenMax.to(level2.mesh.children[0].children[1].material, 2, {opacity: 1});
 
-	TweenLite.to(level2.mesh.position, 1, {y : 0, delay : 0})
-	TweenLite.to(level1.mesh.position, 1, {y : 0, delay : 0})
-	TweenLite.to(level0.mesh.position, 1, {y : 0, delay : 0})
-	TweenLite.to(front.mesh.position, 1, {z : 0, y :0, delay : 0})
+	TweenMax.to(level2.mesh.position, 1, {y : 0, delay : 0})
+	TweenMax.to(level1.mesh.position, 1, {y : 0, delay : 0})
+	TweenMax.to(level0.mesh.position, 1, {y : 0, delay : 0})
+	TweenMax.to(front.mesh.position, 1, {z : 0, y :0, delay : 0})
 
 	levelFocusAnimState = false;
 	levelOpen = false;
