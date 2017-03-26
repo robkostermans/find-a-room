@@ -20,8 +20,8 @@ var data = {
         description:"Small meetingroom for 4 people with screen.",
     },
     "johannes":{
-        title : "Small meeting room for 4 people with whiteboard but no screen.",
-        description:"Wher people meet and drink beer.",
+        title : "Johannes",
+        description:"Small meeting room for 4 people with whiteboard but no screen.",
     },
     "andreas":{
         title : "Andreas",
