@@ -1,7 +1,7 @@
 var data = {
     "paulus":{
         title : "Paulus",
-        description:"Large meemtingroom for 12 people, whiteboard and screen."
+        description:"Large meetingroom for 12 people, whiteboard and screen."
     },
     "fillipus":{
         title : "Fillipus",
