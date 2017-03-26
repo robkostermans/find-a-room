@@ -1,4 +1,4 @@
-# find-a-room
+# Find a room ... in 3d.
 An attempt to learn about the basics of (web) 3d and webgl. I needed an idea for a final end-result; it helped to scope what to implement.
 Its an overview of my office building (yes I work in an old church); it shows the meetingsroom and if they are avaialable.  
 
