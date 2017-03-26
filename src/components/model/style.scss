@@ -5,6 +5,7 @@ $colorBackgroundDark: #A9A9A9;
 $colorBackgroundLight: #f2f2f2;
 $colorAccent: #023c8e;
 $colorTextDark: #333;
+$availableColor : #499333;
 //$primary-color: #A9A9A9;
 //$secondary-color: #ddd;
 //$background-color: #ddd;
@@ -22,6 +23,15 @@ body {
     margin: 0;
     color: $colorTextDark;
     line-height: 1.4;
+    &.mouseOnSelectableObject{
+        cursor:pointer;
+    }
+    &.mouseOnCanvas{
+        //cursor:grab;
+        &[data-mouse="down"]{
+            //cursor:grabbing;
+        }
+    }
 }
 
 main {

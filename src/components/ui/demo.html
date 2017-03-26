@@ -6,7 +6,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body class="_body">
-    <main><nav id="container">
+    <main>
+      <hgroup> 
+        <h1 id="title">Wortell</h1><span class="details" id="availableRoomCounter">test</span>
+      </hgroup><nav id="container" data-state="">
 <div id="circle-loader-wrap">
 <div class="left-wrap">
 <div class="loader" ></div>	
@@ -15,9 +18,22 @@
 <div class="loader" id="end"></div>
 </div>
 </div>
-</nav>
+      <div class="circle-content"><a id="explode" href="#explode" onclick="setState('explode')"><i class="material-icons">layers</i></a><a id="reset" href="#reset" onclick="setState('reset')"><i class="material-icons">layers_clear</i></a><a id="opaque" href="#opaque" onclick="setState('opaque');"><i class="material-icons">opacity</i></a></div>
+      <div class="circle-loader-message"> 
+        <div class="loading-message">Loading room data...</div>
+      </div></nav>
     </main>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    initNavigation(2,Void);
+    
+    
+    
+    
+    
+        
+        
+  </script>
 </html>

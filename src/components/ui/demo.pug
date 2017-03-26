@@ -6,9 +6,13 @@ html(lang="en/us")
         link(href="https://fonts.googleapis.com/icon?family=Material+Icons",rel="stylesheet")
     body(class="_body")
         main
-            include index.pug
+            include title.pug
+            include nav.pug
     script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js")
     script(src='script.js')
+    script.
+        initNavigation(2,Void);
+
 
 
 

@@ -6,10 +6,10 @@ html(lang="en/us")
         link(href="https://fonts.googleapis.com/icon?family=Material+Icons",rel="stylesheet")
     body(class="_body")
         main
+            include components/ui/title.pug
             include components/ui/nav.pug
-
-                
             div(id='canvas')
+            
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js")
         script(src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js')
         script(src='script.js')
@@ -17,9 +17,10 @@ html(lang="en/us")
             window.addEventListener('load', init, false);
             function init() {
                 initScene();
-                initNavigation(2,buildingExplode);
+                initNavigation(2,function(){setState('explode');});
                 church = new Building();
                 scene.add(church.mesh)
+                setRoomAvailability();
 
                 render();
             }
