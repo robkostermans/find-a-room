@@ -40,6 +40,7 @@ var setState = function(state){
             break;
         default:
             buildingReset();
+            showDetails();
     }
 
     //var nav = document.querySelector("nav#container");
@@ -53,7 +54,12 @@ var showDetails = function(id,available){
 		title.innerHTML = data[id].title 
 		var details = document.getElementById("availableRoomCounter");
 		details.innerHTML = data[id].description + "<div class='room-button'><a href='#bookroom' class='button room-available-"+available+"'><i class='room-available'></i>book room</a></div>";
-	}
+	}else{
+        var title = document.getElementById("title");
+		title.innerHTML = "Wortell";
+        var details = document.getElementById("availableRoomCounter");
+        details.innerHTML = avaiableRoomCounter+" meetingsrooms available";
+    }
 }
 
 
