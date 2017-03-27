@@ -22,7 +22,7 @@ Stuff need to be interactive; click stuff, hover effects etc etc. mainly to show
 The room-service (...) is a fake srvice that randomly sets the availability  of the meetingsroom on page load.
 
 ## Messy
-Currently the code is not the cleanest en most structured work I did (understatement). Maybe I will find some time to restructure it later.
+Currently the code is not the cleanest and most structured work I did (understatement). Maybe I will find some time to restructure it later.
 
 
 
