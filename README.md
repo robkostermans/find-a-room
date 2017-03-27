@@ -1,6 +1,6 @@
 # Find a room ... in 3d.
 An attempt to learn about the basics of (web) 3d and webgl. I needed an idea for a final end-result; it helped to scope what to implement.
-Its an overview of my office building (yes I work in an old church); it shows the meetingsroom and if they are available.  
+Its an overview of my office building (yes I work in an old church); it shows the meeting rooms and if they are available.  
 
 ## Everything is better in 3d
 I could do this application in html, css (3d transform) and svg, but wanted to see if I could implement it in "true" 3d.
