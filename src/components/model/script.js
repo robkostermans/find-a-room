@@ -726,7 +726,7 @@ var room = function(args){
 	var floorMesh = new THREE.Mesh(floorGeom, floorMaterial.clone());
 
 	floorMesh.click = function(){
-		//console.log("he een room")
+		//console.log("it's a room")
 	}
 	floorMesh.model_id = args.id;
 	floorMesh.model_type = args.type;
@@ -905,11 +905,10 @@ var setRoomAvailability = function(){
 	scene.traverse( function( node ) {
 		if ( node instanceof THREE.Mesh && node.model_type=="room") {
 			var available = Math.floor((Math.random() * 2) + 1) -1;
-    	    //console.log(node.model_id + " available "+available)
-			//if(available==0)
-				//node.parent.children[2].material.color.set(Colors.unavailableColor)
+    	    node.available = (available == 0 )? 1 : 0;
 			if(available==1){
 				avaiableRoomCounter++;
+				
 				node.parent.children[2].material.color.set(Colors.availableColor)
 				node.parent.children[1].material.color.set(Colors.availableFillColor)
 			}
@@ -943,7 +942,8 @@ function onDocumentMouseDown(event) {
 			var model = intersects[i].object;
 			if(model.model_type == "room" && (main.dataset.state=="explode" || main.dataset.state=="opaque")){
 				//console.log("it is a room "+model.model_id)
-				showDetails(model.model_id);
+				var available =  model.available; //(model.available) ? model.available : model.available;
+				showDetails(model.model_id,available);
 			}
 
 			if(model.model_type == "building" && (main.dataset.state=="reset")){
@@ -994,7 +994,7 @@ function onDocumentMouseOver(event) {
 		document.body.classList.remove("mouseOnSelectableObject")
 	}
 
-	console.log(event.target.nodeName)
+	//console.log(event.target.nodeName)
 	if(rayContainseNothing){
 		document.body.classList.add("mouseOnCanvas")
 			

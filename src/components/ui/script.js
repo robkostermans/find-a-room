@@ -46,12 +46,13 @@ var setState = function(state){
     //nav.dataset.state = state;
 }
 
-var showDetails = function(id){
+var showDetails = function(id,available){
 	if(data[id]){
+        
 		var title = document.getElementById("title");
-		title.innerHTML = data[id].title
+		title.innerHTML = data[id].title 
 		var details = document.getElementById("availableRoomCounter");
-		details.innerHTML = data[id].description
+		details.innerHTML = data[id].description + "<div class='room-button'><a href='#bookroom' class='button room-available-"+available+"'><i class='room-available'></i>book room</a></div>";
 	}
 }
 

@@ -98,10 +98,9 @@
         }
       }
     }
-    
   }
 
-.circle-content {
+  .circle-content {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -116,19 +115,28 @@
     a {
       color: $colorAccent;
       display: block;
-      position:absolute;
+      position: absolute;
       line-height: 1;
       opacity: 0;
       text-align: center;
-      transition:all 0.5s;
-      visibility:hidden;
-      width:100%;
-      outline:0;
+      transition: all 0.5s;
+      visibility: hidden;
+      width: 100%;
+      outline: 0;
     }
-    main[data-state="reset"] & {a#explode{opacity:1;visibility: visible;}} 
-    main[data-state="explode"] & {a#reset{opacity:1;visibility: visible;}} 
-}
-
+    main[data-state="reset"] & {
+      a#explode {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+    main[data-state="explode"] & {
+      a#reset {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
 
   .circle-loader-message {
     color: $colorAccent;
@@ -140,22 +148,55 @@
     white-space: nowrap;
   }
 
-
-hgroup{
-  //background:$colorBackgroundLight;
-  left:50px;
-  max-width:50vw;
-  position:fixed;
-  top:50px;
-  z-index: 999;
-  
-  h1{
-    margin:0;
-    
+  hgroup {
+    //background:$colorBackgroundLight;
+    left: 50px;
+    max-width: 50vw;
+    position: fixed;
+    top: 50px;
+    z-index: 999;
+    h1 {
+      margin: 0;
+    }
+    #availableRoomCounter {
+      opacity: 0;
+      color: $colorAccent;
+    }
   }
-  #availableRoomCounter{
-     opacity:0;
-     color: $colorAccent;
-
+.room-button{
+  padding-top:0.5em;
+  .button {
+    display: inline-block;
+    color: $colorAccent;
+    text-decoration: none;
+    background-color: lighten($colorAccent, 65%);
+    border: 1px solid $colorAccent;
+    padding:0.25em 0.45em;
+    padding-right:30px;
+    position: relative;
+    .room-available {
+      border-radius: 50%;
+      display: inline-block;
+      height: 10px;
+      margin-right: 10px;
+      position: absolute;
+      width: 10px;
+      right: 0;
+      top: 12px;
+    }
+    &.room-available-1 {
+        background-color: $colorBackgroundLight;
+        color:#333;
+        border-color:#333;
+        cursor:default;
+       .room-available {
+        background-color: red;
+      }
+    }
+    &.room-available-0 {
+      .room-available {
+        background-color: $availableColor;
+      }
+    }
   }
 }
