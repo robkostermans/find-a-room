@@ -58,7 +58,7 @@ var showDetails = function(id,available){
         var title = document.getElementById("title");
 		title.innerHTML = "Wortell";
         var details = document.getElementById("availableRoomCounter");
-        details.innerHTML = avaiableRoomCounter+" meetingsrooms available";
+        details.innerHTML = avaiableRoomCounter+" meetingrooms available";
     }
 }
 
